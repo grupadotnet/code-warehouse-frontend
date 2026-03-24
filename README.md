@@ -65,3 +65,15 @@ npm install
 ```bash
 npm run dev
 ```
+
+---
+
+## 👥 Authors
+
+- **Frontend Web Team:**
+  - [Jakub Motyka](url_github)
+  - [Mateusz Matla](url_github)
+  - [Dawid Musiał](https://github.com/musialek007)
+  - [Łukasz Śladowski](url_github)
+
+Made with ❤️ by the Programming Club Team.
