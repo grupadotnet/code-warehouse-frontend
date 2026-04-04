@@ -1,0 +1,28 @@
+@import "tailwindcss";
+body{
+    font-family: 'Space Mono', monospace;
+}
+:root {
+    --buttonBg: #FFD400;
+    --filterSection: #FFF9F0;
+    --placeholderEditFormBg: #FFF9F0;
+    --cancelEditFormBg: #FFF9F0;
+    --clearAllFilterBtn: #FFF9F0;
+    --editFormIconBg: #FF5252;
+    --deleteEditFormBtnBg: #FF5252;
+    --openEditFormBtnBg: #FF6200;
+    --notificationPopUpBg: #FF6200
+}
+
+@layer utilities {
+    .no-spinners::-webkit-inner-spin-button,
+    .no-spinners::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .no-spinners {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+}
