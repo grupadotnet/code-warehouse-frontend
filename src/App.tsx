@@ -1,9 +1,10 @@
 import "./App.css";
+import Layout from "./pages/layout";
 
 function App() {
   return (
     <>
-      <h1>Something will be here!!</h1>
+      <Layout />
     </>
   );
 }
