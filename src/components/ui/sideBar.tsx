@@ -2,7 +2,7 @@ import { cn } from "../../lib/utils";
 import { CustomClasses } from "../utilities/customClasses";
 import Filters from "./filters";
 import Icon from "../../lib/iconConfig";
-import Button from "./button";
+import Button from "../utilities/button";
 
 export default function SideBar() {
     return (

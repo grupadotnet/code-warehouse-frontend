@@ -1,6 +1,6 @@
 import { cn } from "../../lib/utils";
 import type { Product } from "../../types/inventory";
-import Button from "../ui/button";
+import Button from "./button";
 import Icon from "../../lib/iconConfig";
 import { CustomClasses } from "./customClasses";
 

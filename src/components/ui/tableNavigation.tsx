@@ -1,5 +1,5 @@
 import { cn } from "../../lib/utils";
-import Button from "./button";
+import Button from "../utilities/button";
 import Icon from "../../lib/iconConfig";
 import { CustomClasses } from "../utilities/customClasses";
 
