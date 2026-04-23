@@ -2,19 +2,40 @@ import { useState } from "react";
 import { cn } from "../../lib/utils";
 import Button from "../utilities/button";
 import { CustomClasses } from "../utilities/customClasses";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/client";
 
 export function LoginForm() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
+    setError("");
+    try {
+      const response = await api.post("/auth/login", {
+        username,
+        password,
+      });
+
+      const token = response.data.token;
+
+      localStorage.setItem("username", username);
+      if (token) {
+        localStorage.setItem("token", token);
+        navigate("/");
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError("Invalid username or password.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
     setUsername("");
     setPassword("");
-    alert("Logged in successfully!");
   };
 
   return (
@@ -66,6 +87,11 @@ export function LoginForm() {
           Sign up
         </Link>
       </p>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex items-center justify-center">
+          <span className="block sm:inline text-sm text-center">{error}</span>
+        </div>
+      )}
     </form>
   );
 }

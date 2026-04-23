@@ -2,24 +2,47 @@ import { useState } from "react";
 import { cn } from "../../lib/utils";
 import Button from "../utilities/button";
 import { CustomClasses } from "../utilities/customClasses";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/client";
+import axios from "axios";
 
 export function RegisterForm() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
 
-    // Prosta walidacja przed wysłaniem
     if (password !== confirmPassword) {
-      alert("hasło nie jest identyczne");
+      setError("Passwords must be identical.");
       return;
     }
 
-    //console.log("Registering:", username, "with password:", password);
-    alert("zarejestrowano pomyślnie");
+    if (password.length < 15) {
+      setError("Password is too short (min. 15 characters).");
+      return;
+    }
+
+    try {
+      const response = await api.post("/auth/register", {
+        username: username,
+        password: password,
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        navigate("/login");
+      }
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const backendMessage =
+          err.response?.data?.error || "Registration failed.";
+        setError(backendMessage);
+      }
+    }
   };
 
   return (
@@ -57,32 +80,18 @@ export function RegisterForm() {
       <input
         type="password"
         placeholder="Confirm Password"
-        className={cn(
-          "border rounded-md py-4 px-6 text-lg outline-none",
-
-          confirmPassword && password !== confirmPassword
-            ? "border-red-500"
-            : "border-gray-300",
-        )}
+        className={cn("border rounded-md py-4 px-6 text-lg outline-none")}
         onChange={(e) => setConfirmPassword(e.target.value)}
         value={confirmPassword}
         required
       />
-
-      {confirmPassword && password !== confirmPassword && (
-        <span className="text-red-500 text-sm -mt-4 ml-2">
-          Passwords must be identical.
-        </span>
-      )}
-
       <Button
-        name="SIGN UP"
+        name="REGISTER"
         className={cn(
           "py-4 text-xl font-bold uppercase",
           CustomClasses.loginButton,
         )}
       />
-
       <p className={cn("text-center text-gray-600")}>
         Already have an account?{" "}
         <Link
@@ -92,6 +101,11 @@ export function RegisterForm() {
           Sign in
         </Link>
       </p>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex items-center justify-center">
+          <span className="block sm:inline text-sm ">{error}</span>
+        </div>
+      )}
     </form>
   );
 }
