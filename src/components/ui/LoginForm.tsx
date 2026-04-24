@@ -4,6 +4,7 @@ import Button from "../utilities/button";
 import { CustomClasses } from "../utilities/customClasses";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/client";
+import axios from "axios";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -27,11 +28,13 @@ export function LoginForm() {
         localStorage.setItem("token", token);
         navigate("/");
       }
-    } catch (err: any) {
-      if (err.response?.status === 401) {
-        setError("Invalid username or password.");
-      } else {
-        setError("An error occurred. Please try again.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setError("Invalid username or password.");
+        } else {
+          setError("An error occurred. Please try again.");
+        }
       }
     }
     setUsername("");

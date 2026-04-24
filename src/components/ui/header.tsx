@@ -4,17 +4,9 @@ import { cn } from "../../lib/utils";
 
 export function Header() {
   const handleLogout = () => {
-    // 1. Czyścimy localStorage
     localStorage.removeItem("token");
-
-    // 2. Opcjonalnie: czyścimy inne dane, jeśli je tam trzymasz
-    localStorage.clear(); // To wyczyści wszystko
-
-    // 3. Przekierowujemy do strony logowania
+    localStorage.clear();
     window.location.href = "/login";
-    // Używamy window.location zamiast navigate,
-    // żeby "odświeżyć" stan całej aplikacji i routera
-    console.log("Wylogowano! Token usunięty, przekierowanie do logowania.");
   };
   const user = localStorage.getItem("username");
 
