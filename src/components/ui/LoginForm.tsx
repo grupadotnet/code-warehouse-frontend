@@ -150,10 +150,20 @@ export function LoginForm() {
         </div>
 
         <label className="flex h-[40px] w-fit items-center gap-[15px] py-[10px]">
-          <input
-            type="checkbox"
-            className="h-[20px] w-[20px] appearance-none border-2 border-black bg-white outline outline-0 outline-black outline-offset-0 accent-black"
-          />
+          <span className="relative inline-flex h-[20px] w-[20px] shrink-0 items-center justify-center">
+            <input
+              type="checkbox"
+              className="peer h-full w-full cursor-pointer appearance-none rounded-none border-2 border-black bg-white outline-none checked:bg-black"
+            />
+            <svg
+              viewBox="0 0 14 14"
+              fill="none"
+              aria-hidden="true"
+              className="pointer-events-none absolute h-[14px] w-[14px] opacity-0 transition-opacity peer-checked:opacity-100"
+            >
+              <path d="M2 7.5L5.5 11L12 3" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
           <span
             className={cn("font-sans text-[14px] font-bold leading-[18px] text-black opacity-50")}
             style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}
@@ -164,9 +174,9 @@ export function LoginForm() {
 
         <Button
           className={cn(
-            "h-[69px] w-full bg-black font-sans text-[22px] leading-[28px] text-white shadow-[4px_4px_0px_#000000]",
+            "h-[69px] w-full border-4 border-black bg-black font-sans text-[22px] leading-[28px] text-white shadow-[4px_4px_0px_#000000]",
             "flex items-center justify-center gap-2",
-            "hover:bg-[#FFF9F0] hover:text-black transition-colors duration-150",
+            "hover:border-black hover:bg-[#FFF9F0] hover:text-black transition-colors duration-150",
           )}
         >
           <span style={{ fontWeight: 500 }}>SIGN IN</span>
