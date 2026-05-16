@@ -76,5 +76,7 @@ npm run dev
   - [Dawid Musiał](https://github.com/musialek007)
   - [Łukasz Śladowski](url_github)
   - [Kamil Kowalski](https://github.com/NightFoxDD)
+  - [Robert Szwajnos](url_github)
+  - [Bartłomiej Łukomski](url_github)
 
 Made with ❤️ by the Programming Club Team
