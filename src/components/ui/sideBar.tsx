@@ -4,7 +4,17 @@ import Filters from "./filters";
 import Icon from "../../lib/iconConfig";
 import Button from "../utilities/button";
 
-export default function SideBar() {
+export default function SideBar({
+    categories,
+    selectedCategory,
+    setSelectedCategory,
+    clearFilters,
+}: {
+    categories: string[];
+    selectedCategory: string;
+    setSelectedCategory: (category: string) => void;
+    clearFilters: () => void;
+}) {
     return (
         <div className={cn("flex flex-col w-1/6 h-full border", CustomClasses.shadowBox)}>
             <div className={cn("flex flex-col m-3 mb-0")}>
@@ -17,11 +27,15 @@ export default function SideBar() {
             </div>
             <hr className={cn("border-2 border-black my-2 mx-3")}/>
             <div className={cn("flex flex-col items-center gap-2 ml-3 overflow-y-auto pr-4 pl-1")}>
-                <Filters/>
+                <Filters
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                />
             </div>
             <div className={cn("flex flex-col gap-2 m-3 mt-auto")}>
                 <Button name="APPLY FILTERS" className={cn("w-full bg-black text-white", CustomClasses.filterButton)} />
-                <Button name="CLEAR ALL" className={cn("w-full bg-(--clearAllFilterBtn) text-black", CustomClasses.filterButton)} />
+                <Button name="CLEAR ALL" className={cn("w-full bg-(--clearAllFilterBtn) text-black", CustomClasses.filterButton)} onClick={clearFilters} />
             </div>
         </div>
     );

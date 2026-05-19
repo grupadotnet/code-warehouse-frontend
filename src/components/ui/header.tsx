@@ -2,7 +2,13 @@ import SearchBar from "./searchbar";
 import UserMenu from "./userMenu";
 import { cn } from "../../lib/utils";
 
-export function Header() {
+export function Header({
+  search,
+  setSearch,
+}: {
+  search: string;
+  setSearch: (search: string) => void;
+}) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.clear();
@@ -12,7 +18,7 @@ export function Header() {
 
   return (
     <div className={cn("flex flex-row justify-between items-center gap-4")}>
-      <SearchBar />
+      <SearchBar search={search} setSearch={setSearch} />
       <UserMenu />
       <div className="flex flex-col px-8">
         <p className="text-sm">Witaj,{user}</p>
