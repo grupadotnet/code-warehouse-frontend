@@ -9,28 +9,59 @@ import { CustomClasses } from "../components/utilities/customClasses";
 import EditForm from "../components/ui/editForm";
 import { mockedProducts } from "../api/mockeddata";
 import TableNavigation from "../components/ui/tableNavigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTableFilters } from "../hooks/useTableFilters";
 
 export default function Layout() {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const tableFilters = useTableFilters();
   function handleSetCurrentPage(page: number) {
     if (page < 1) {
-      setCurrentPage(1);
+      tableFilters.setPage(1);
     } else if (page > pages) {
-      setCurrentPage(pages);
+      tableFilters.setPage(pages);
     } else {
-      setCurrentPage(page);
+      tableFilters.setPage(page);
     }
   }
   const itemsPerPage = 7;
-  const pages = Math.ceil(mockedProducts.length / itemsPerPage);
+  const categories = useMemo(
+    () => Array.from(new Set(mockedProducts.map((product) => product.category))),
+    [],
+  );
+  const filteredProducts = useMemo(() => {
+    const search = tableFilters.search.toLowerCase();
+
+    return mockedProducts.filter((product) => {
+      const matchesCategory =
+        !tableFilters.category || product.category === tableFilters.category;
+      const matchesSearch =
+        !search ||
+        product.productName.toLowerCase().includes(search) ||
+        product.barcode.toLowerCase().includes(search) ||
+        product.producer.toLowerCase().includes(search);
+
+      return matchesCategory && matchesSearch;
+    });
+  }, [tableFilters.category, tableFilters.search]);
+  const pages = Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage));
+
+  useEffect(() => {
+    if (tableFilters.page > pages) {
+      tableFilters.setPage(pages);
+    }
+  }, [pages, tableFilters]);
 
   return (
     <div className={cn("flex flex-col gap-4 h-screen w-full p-3")}>
-      <Header />
+      <Header search={tableFilters.search} setSearch={tableFilters.setSearch} />
       <div className={cn("flex flex-row gap-4 flex-1 overflow-hidden")}>
-        <SideBar />
+        <SideBar
+          categories={categories}
+          selectedCategory={tableFilters.category}
+          setSelectedCategory={tableFilters.setCategory}
+          clearFilters={tableFilters.clearFilters}
+        />
         <div className={cn("flex flex-col gap-4 flex-1 min-w-0")}>
           <div
             className={cn(
@@ -40,27 +71,9 @@ export default function Layout() {
             <div className={cn("flex-1 min-w-0 overflow-x-auto pb-4 pr-4")}>
               <SelectedFilters
                 selectedFilters={[
-                  "test",
-                  "test2",
-                  "test3",
-                  "test4",
-                  "test5",
-                  "test6",
-                  "test7",
-                  "test8",
-                  "test9",
-                  "test10",
-                  "test11",
-                  "test12",
-                  "test13",
-                  "test14",
-                  "test15",
-                  "test16",
-                  "test17",
-                  "test18",
-                  "test19",
-                  "test20",
-                ]}
+                  tableFilters.search,
+                  tableFilters.category,
+                ].filter(Boolean)}
               />
             </div>
             <div className={cn("shrink-0")}>
@@ -78,14 +91,14 @@ export default function Layout() {
           <div className={cn("flex flex-row gap-4 h-full justify-between")}>
             <div className={cn("flex flex-col h-full gap-4 w-full")}>
               <Table
-                data={mockedProducts}
+                data={filteredProducts}
                 number={itemsPerPage}
-                page={currentPage}
+                page={tableFilters.page}
                 setIsEditFormOpen={setIsEditFormOpen}
               />
               <TableNavigation
                 pages={pages}
-                currentPage={currentPage}
+                currentPage={tableFilters.page}
                 setCurrentPage={handleSetCurrentPage}
               />
             </div>
